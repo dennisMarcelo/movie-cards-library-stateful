@@ -27,6 +27,9 @@ class AddMovie extends React.Component {
   }
 
   setImputs = (callback) => {
+    const { subtitle, title, imagePath, storyline, rating, genre } = this.state;
+    callback({ subtitle, title, imagePath, storyline, rating, genre });
+
     this.setState({
       subtitle: '',
       title: '',
@@ -35,13 +38,10 @@ class AddMovie extends React.Component {
       rating: 0,
       genre: 'action',
     });
-
-    const { subtitle, title, imagePath, storyline, rating, genre } = this.state;
-    callback({ subtitle, title, imagePath, storyline, rating, genre });
   };
 
   render() {
-    const { NewCard } = this.props;
+    const { onClick } = this.props;
     const { title, subtitle, imagePath, storyline, rating, genre } = this.state;
 
     return (
@@ -55,7 +55,7 @@ class AddMovie extends React.Component {
         <button
           type="button"
           data-testid="send-button"
-          onClick={ this.setImputs.bind(this, NewCard) }
+          onClick={ this.setImputs.bind(this, onClick) }
         >
           Adicionar filme
         </button>
@@ -65,7 +65,7 @@ class AddMovie extends React.Component {
 }
 
 AddMovie.propTypes = {
-  NewCard: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default AddMovie;

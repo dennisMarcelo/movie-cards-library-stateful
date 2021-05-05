@@ -1,5 +1,5 @@
 import React from 'react';
-import data from '../data';
+import PropTypes from 'prop-types';
 import SearchBar from './SearchBar';
 import MovieList from './MovieList';
 import AddMovie from './AddMovie';
@@ -7,28 +7,49 @@ import AddMovie from './AddMovie';
 class MovieLibrary extends React.Component {
   constructor(props) {
     super(props);
+    const { movies } = this.props;
     this.state = {
-      movies: data,
+      allMovies: movies,
+      movies,
       searchText: '',
       bookmarkedOnly: false,
       selectedGenre: '',
     };
   }
 
-  onSearchTextChange = () => {
+  onSearchTextChange = ({ target: { type, value, id, checked } }) => {
+    this.handleChange(type, value, id, checked);
+    const { allMovies } = this.state;
 
+    if (value !== '') {
+      const globalRegex = new RegExp(`${value}*`, 'iu');
+      const moviesFilted = allMovies.filter(({ title }) => globalRegex.test(title));
+      this.setState({ movies: moviesFilted });
+    }
   }
 
-  onBookmarkedChange = () => {
-
+  onBookmarkedChange = ({ target: { type, value, id, checked } }) => {
+    this.handleChange(type, value, id, checked);
   }
 
-  onSelectedGenreChange = () => {
-
+  onSelectedGenreChange = ({ target: { type, value, id, checked } }) => {
+    this.handleChange(type, value, id, checked);
   }
 
-  NewCard = (teste) => {
-    console.log(teste);
+  handleChange = (type, value, id, checked) => {
+    if (type === 'checkbox') {
+      this.setState({
+        [id]: checked,
+      });
+    } else {
+      this.setState({
+        [id]: value,
+      });
+    }
+  }
+
+  NewCard = () => {
+
   }
 
   render() {
@@ -45,10 +66,14 @@ class MovieLibrary extends React.Component {
         />
 
         <MovieList movies={ movies } />
-        <AddMovie NewCard={ this.NewCard } />
+        <AddMovie onClick={ this.NewCard } />
       </div>
     );
   }
 }
+
+MovieLibrary.propTypes = {
+  movies: PropTypes.arrayOf(Object).isRequired,
+};
 
 export default MovieLibrary;
