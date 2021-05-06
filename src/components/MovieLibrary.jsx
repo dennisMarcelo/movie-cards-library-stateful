@@ -23,13 +23,35 @@ class MovieLibrary extends React.Component {
 
     if (value !== '') {
       const globalRegex = new RegExp(`${value}*`, 'iu');
-      const moviesFilted = allMovies.filter(({ title }) => globalRegex.test(title));
+      const moviesFilted = allMovies
+        .filter(
+          ({ title, subtitle, storyline }) => globalRegex.test(title)
+            || globalRegex.test(subtitle)
+            || globalRegex.test(storyline),
+        );
       this.setState({ movies: moviesFilted });
     }
   }
 
   onBookmarkedChange = ({ target: { type, value, id, checked } }) => {
     this.handleChange(type, value, id, checked);
+    const { movies, allMovies, searchText } = this.state;
+
+    if (checked) {
+      const moviesFilted = movies.filter(({ bookmarked }) => bookmarked);
+      this.setState({ movies: moviesFilted });
+    } else if (searchText !== '') {
+      const globalRegex = new RegExp(`${searchText}*`, 'iu');
+      const moviesFilted = allMovies
+        .filter(
+          ({ title, subtitle, storyline }) => globalRegex.test(title)
+              || globalRegex.test(subtitle)
+              || globalRegex.test(storyline),
+        );
+      this.setState({ movies: moviesFilted });
+    } else {
+      this.setState({ movies: allMovies });
+    }
   }
 
   onSelectedGenreChange = ({ target: { type, value, id, checked } }) => {
@@ -77,3 +99,12 @@ MovieLibrary.propTypes = {
 };
 
 export default MovieLibrary;
+
+// conteudos utilizado
+/*
+  https://stackoverflow.com/questions/9655164/regex-ignore-case-sensitivity
+  https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+  https://reulison.com.br/regex/  (Expressões Regulares (RegEx))
+  https://regex101.com/r/1jSD0F/1/  (utilizado para fazer testes)
+*/
