@@ -17,6 +17,13 @@ class MovieLibrary extends React.Component {
     };
   }
 
+  // a ideia é trazer a regex junto com a callback;
+  filterMovies = (globalRegex) => (
+    { title, subtitle, storyline },
+  ) => globalRegex.test(title)
+  || globalRegex.test(subtitle)
+    || globalRegex.test(storyline)
+
   onSearchTextChange = ({ target: { type, value, id, checked } }) => {
     this.handleChange(type, value, id, checked);
     const { allMovies } = this.state;
@@ -24,11 +31,7 @@ class MovieLibrary extends React.Component {
     if (value !== '') {
       const globalRegex = new RegExp(`${value}*`, 'iu');
       const moviesFilted = allMovies
-        .filter(
-          ({ title, subtitle, storyline }) => globalRegex.test(title)
-            || globalRegex.test(subtitle)
-            || globalRegex.test(storyline),
-        );
+        .filter(this.filterMovies(globalRegex));
       this.setState({ movies: moviesFilted });
     }
   }
@@ -43,11 +46,7 @@ class MovieLibrary extends React.Component {
     } else if (searchText !== '') {
       const globalRegex = new RegExp(`${searchText}*`, 'iu');
       const moviesFilted = allMovies
-        .filter(
-          ({ title, subtitle, storyline }) => globalRegex.test(title)
-              || globalRegex.test(subtitle)
-              || globalRegex.test(storyline),
-        );
+        .filter(this.filterMovies(globalRegex));
       this.setState({ movies: moviesFilted });
     } else {
       this.setState({ movies: allMovies });
@@ -107,4 +106,5 @@ export default MovieLibrary;
   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
   https://reulison.com.br/regex/  (Expressões Regulares (RegEx))
   https://regex101.com/r/1jSD0F/1/  (utilizado para fazer testes)
+  https://qastack.com.br/programming/7759237/how-do-i-pass-an-extra-parameter-to-the-callback-function-in-javascript-filter
 */
