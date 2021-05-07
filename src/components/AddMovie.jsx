@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InputRating from './InputRating';
-import ImputStoryLine from './ImputStoryLine';
-import InputImagePath from './InputImagePath';
-import ImputSubtitle from './ImputSubtitle';
-import InputTitle from './InputTitle';
-import InputGenre from './InputGenre';
+import InputRating from './inputs/InputRating';
+import ImputStoryLine from './inputs/ImputStoryLine';
+import InputImagePath from './inputs/InputImagePath';
+import ImputSubtitle from './inputs/ImputSubtitle';
+import InputTitle from './inputs/InputTitle';
+import InputGenre from './inputs/InputGenre';
 
 class AddMovie extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class AddMovie extends React.Component {
 
   setImputs = (callback) => {
     const { subtitle, title, imagePath, storyline, rating, genre } = this.state;
-    callback({ subtitle, title, imagePath, storyline, rating, genre });
+    callback({ subtitle, title, imagePath, storyline, rating: Number(rating), genre });
 
     this.setState({
       subtitle: '',
