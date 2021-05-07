@@ -81,3 +81,27 @@ body {
   justify-content: flex-end;
   padding: 12px 20px;
 }
+
+.form-search {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 40px;
+  width: 50%;
+}
+
+.form-search label {
+  width: 80%;
+}
+
+#searchText {
+  display: block;
+  width: 80%;
+}
+
+#bookmarkedOnly {
+  margin-left: 10px;
+}
+
+#selectedGenre {
+  margin-left: 10px;
+}

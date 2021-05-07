@@ -69,8 +69,11 @@ class MovieLibrary extends React.Component {
     }
   }
 
-  NewCard = () => {
-
+  addNewCard = (newCard) => {
+    this.setState((afterState) => ({
+      allMovies: [...afterState.allMovies, newCard],
+      movies: [...afterState.movies, newCard],
+    }));
   }
 
   render() {
@@ -87,7 +90,7 @@ class MovieLibrary extends React.Component {
         />
 
         <MovieList movies={ movies } />
-        <AddMovie onClick={ this.NewCard } />
+        <AddMovie onClick={ this.addNewCard } />
       </div>
     );
   }
