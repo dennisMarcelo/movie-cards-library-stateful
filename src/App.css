@@ -93,15 +93,15 @@ body {
   width: 80%;
 }
 
-#searchText {
+.searchText input {
   display: block;
   width: 80%;
 }
 
-#bookmarkedOnly {
+.bk input {
   margin-left: 10px;
 }
 
-#selectedGenre {
+.slg select {
   margin-left: 10px;
 }
