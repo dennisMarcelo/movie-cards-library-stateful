@@ -17,8 +17,32 @@ class MovieLibrary extends React.Component {
     };
   }
 
+  filterForm = () => {
+    const { searchText, movies, allMovies, bookmarkedOnly, selectedGenre } = this.state;
+    let movieFilted;
+    if (searchText !== '') {
+      const globalRegex = new RegExp(`${searchText}*`, 'iu');
+      movieFilted = movies
+        .filter((this.filterSearch(globalRegex)));
+    } else {
+      movieFilted = allMovies;
+    }
+
+    if (bookmarkedOnly) {
+      movieFilted = movieFilted.filter(({ bookmarked }) => bookmarked);
+    }
+
+    if (selectedGenre !== '') {
+      movieFilted = movieFilted.filter(({ genre }) => genre === selectedGenre);
+    }
+
+    this.setState({
+      movies: movieFilted,
+    });
+  }
+
   // a ideia é trazer a regex junto com a callback;
-  filterMovies = (globalRegex) => (
+  filterSearch = (globalRegex) => (
     { title, subtitle, storyline },
   ) => globalRegex.test(title)
   || globalRegex.test(subtitle)
@@ -26,31 +50,10 @@ class MovieLibrary extends React.Component {
 
   onSearchTextChange = ({ target: { type, value, id, checked } }) => {
     this.handleChange(type, value, id, checked);
-    const { allMovies } = this.state;
-
-    if (value !== '') {
-      const globalRegex = new RegExp(`${value}*`, 'iu');
-      const moviesFilted = allMovies
-        .filter(this.filterMovies(globalRegex));
-      this.setState({ movies: moviesFilted });
-    }
   }
 
   onBookmarkedChange = ({ target: { type, value, id, checked } }) => {
     this.handleChange(type, value, id, checked);
-    const { movies, allMovies, searchText } = this.state;
-
-    if (checked) {
-      const moviesFilted = movies.filter(({ bookmarked }) => bookmarked);
-      this.setState({ movies: moviesFilted });
-    } else if (searchText !== '') {
-      const globalRegex = new RegExp(`${searchText}*`, 'iu');
-      const moviesFilted = allMovies
-        .filter(this.filterMovies(globalRegex));
-      this.setState({ movies: moviesFilted });
-    } else {
-      this.setState({ movies: allMovies });
-    }
   }
 
   onSelectedGenreChange = ({ target: { type, value, id, checked } }) => {
@@ -59,13 +62,9 @@ class MovieLibrary extends React.Component {
 
   handleChange = (type, value, id, checked) => {
     if (type === 'checkbox') {
-      this.setState({
-        [id]: checked,
-      });
+      this.setState({ [id]: checked }, () => this.filterForm());
     } else {
-      this.setState({
-        [id]: value,
-      });
+      this.setState({ [id]: value }, () => this.filterForm());
     }
   }
 
